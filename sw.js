@@ -10,6 +10,7 @@ const urlsToCache = [
   './hotel.png',
   './liti.png',
   './train.png',
+  './ticket.png',
   './man.png',
   './shoppingbag.png',
   './note.png',
@@ -37,4 +38,5 @@ self.addEventListener('fetch', event => {
         return fetch(event.request);
       })
   );
+
 });
