@@ -4,143 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 宸宸星星曼谷大冒險</title>
-    <!-- PWA 設定 -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4AA3DF">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icon-192.png"> 
-    
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. 基礎 CSS --- */
-        :root {
-            --primary-color: #4AA3DF;
-            --accent-color: #FFD700;
-            --bg-color: #E0F7FA;
-            --text-color: #444;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --nav-height: 85px;
-        }
+        :root { --primary-color: #4AA3DF; --accent-color: #FFD700; --bg-color: #E0F7FA; --text-color: #444; --card-bg: rgba(255, 255, 255, 0.95); --nav-height: 85px; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Itim', 'Noto Sans TC', cursive, sans-serif;
-            margin: 0; padding: 0;
-            background-image: url('背景圖.png'); 
-            background-size: 300px; background-repeat: repeat; background-attachment: fixed;
-            background-color: var(--bg-color); color: var(--text-color);
-            padding-bottom: calc(var(--nav-height) + 20px); font-size: 16px;
-            overscroll-behavior-y: contain; 
-        }
-
-        header {
-            background: rgba(255, 255, 255, 0.9); padding: 15px 10px; text-align: center;
-            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;
-            padding-top: env(safe-area-inset-top); 
-        }
+        body { font-family: 'Itim', 'Noto Sans TC', cursive, sans-serif; margin: 0; padding: 0; background-image: url('背景圖.png'); background-size: 300px; background-repeat: repeat; background-attachment: fixed; background-color: var(--bg-color); color: var(--text-color); padding-bottom: calc(var(--nav-height) + 20px); font-size: 16px; overscroll-behavior-y: contain; }
+        header { background: rgba(255, 255, 255, 0.9); padding: 15px 10px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; padding-top: env(safe-area-inset-top); }
         h1 { margin: 0; font-size: 1.2rem; color: var(--primary-color); display: flex; align-items: center; justify-content: center; gap: 10px; padding-top: 10px;}
         .header-icon { height: 35px; width: auto; mix-blend-mode: multiply; }
-        
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
-        .card {
-            background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid transparent; transition: transform 0.2s;
-        }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid transparent; transition: transform 0.2s; }
         .card:hover { border-color: rgba(74, 163, 223, 0.2); }
-        
-        button {
-            background-color: var(--primary-color); color: white; border: none; padding: 8px 15px;
-            border-radius: 50px; font-family: inherit; cursor: pointer; font-size: 0.9rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;
-        }
+        button { background-color: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 50px; font-family: inherit; cursor: pointer; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s; }
         button:active { transform: scale(0.95); }
         button.secondary { background-color: #FFB74D; }
         button.danger { background-color: #FF7043; }
+        button.success { background-color: #4CAF50; }
         button.outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
         button.icon-btn { padding: 5px 10px; border-radius: 10px; font-size: 1.2rem; }
         button.full-width { width: 100%; margin-top: 15px; }
-
-        input, textarea, select {
-            width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 2px solid #eee;
-            border-radius: 10px; font-family: inherit; background: #fff;
-        }
+        input, textarea, select { width: 100%; padding: 10px; margin: 5px 0 15px 0; border: 2px solid #eee; border-radius: 10px; font-family: inherit; background: #fff; }
         input:focus, textarea:focus { outline: none; border-color: var(--primary-color); }
         textarea { resize: vertical; min-height: 80px; }
         label { font-weight: bold; color: #666; font-size: 0.9rem; display: block; margin-top: 10px; }
-        
-        /* 底部導航 */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height);
-            background: white; display: flex; overflow-x: auto; align-items: center;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1000; padding: 0 5px;
-            -ms-overflow-style: none; scrollbar-width: none;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background: white; display: flex; overflow-x: auto; align-items: center; box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1000; padding: 0 5px; -ms-overflow-style: none; scrollbar-width: none; padding-bottom: env(safe-area-inset-bottom); }
         .bottom-nav::-webkit-scrollbar { display: none; }
-        .nav-item {
-            flex: 0 0 auto; width: 68px; text-align: center; padding: 5px; font-size: 0.75rem;
-            color: #888; cursor: pointer; border-radius: 15px; margin: 0 2px; transition: 0.2s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        .nav-item { flex: 0 0 auto; width: 68px; text-align: center; padding: 5px; font-size: 0.75rem; color: #888; cursor: pointer; border-radius: 15px; margin: 0 2px; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .nav-item.active { background-color: rgba(74, 163, 223, 0.1); color: var(--primary-color); font-weight: bold; }
         .nav-icon-img { width: 32px; height: 32px; object-fit: contain; margin-bottom: 4px; display: block; mix-blend-mode: multiply; }
-        
         .page { display: none; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .info-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 8px 0; align-items: baseline; }
-        .info-label { color: #888; font-size: 0.9rem; min-width: 80px; }
+        .info-label { color: #888; font-size: 0.9rem; min-width: 90px; }
         .info-value { font-weight: 500; text-align: right; flex-grow: 1; word-break: break-all;}
         .section-title { color: var(--primary-color); border-bottom: 3px solid var(--accent-color); padding-bottom: 5px; margin-bottom: 15px; margin-top: 25px; display: inline-block; font-size: 1.1rem; }
         .edit-controls { text-align: right; margin-bottom: 10px; }
         .edit-group { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #eee; position: relative; }
         .delete-btn-corner { position: absolute; top: 5px; right: 5px; font-size: 0.9rem; background: #FF7043; color: white; padding: 2px 8px; border-radius: 10px;}
-        
         .day-header { background: var(--accent-color); color: #5d4037; padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
         .timeline-item { border-left: 3px solid var(--primary-color); padding-left: 15px; margin-left: 10px; margin-bottom: 20px; position: relative; }
         .timeline-item::before { content: '★'; position: absolute; left: -9px; top: 0; color: var(--accent-color); background: #fff; border-radius: 50%; }
         .detail-card { background: #fff; border: 1px solid #eee; border-radius: 10px; padding: 10px; margin-top: 5px; font-size: 0.9rem; }
         .detail-row { display: flex; gap: 8px; margin-bottom: 5px; align-items: flex-start; }
         .detail-icon { color: var(--primary-color); font-weight: bold; min-width: 45px; }
-
         .trans-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 10px; }
-
-        /* MRT 縮放 */
-        #mrt-container { 
-            overflow: auto; 
-            border: 2px solid var(--primary-color); 
-            border-radius: 10px; 
-            height: 60vh; 
-            background: white; 
-            position: relative;
-            -webkit-overflow-scrolling: touch; 
-        }
+        #mrt-container { overflow: auto; border: 2px solid var(--primary-color); border-radius: 10px; height: 60vh; background: white; position: relative; -webkit-overflow-scrolling: touch; }
         .zoom-controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
-        .zoom-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: var(--primary-color); color: white;
-            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: none; padding: 0;
-        }
+        .zoom-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--primary-color); color: white; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: none; padding: 0; }
         .zoom-btn:active { transform: scale(0.9); }
         .zoom-btn.reset { background: #607D8B; font-size: 1rem; }
-        
         .shopping-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px dashed #ccc; }
         .shopping-item.checked { opacity: 0.5; text-decoration: line-through; }
         .check-circle { width: 22px; height: 22px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; cursor: pointer; background: white; }
         .checked .check-circle { background: #4CAF50; border-color: #4CAF50; color: white; }
-
         .emergency-section h4 { color: #D84315; border-bottom: 2px solid #FFAB91; display: inline-block; margin-top: 15px; margin-bottom: 5px;}
         .emergency-section p { margin: 5px 0; line-height: 1.5; }
-
         details { margin-bottom: 10px; background: white; border-radius: 10px; border: 1px solid #eee; }
         summary { padding: 10px; cursor: pointer; font-weight: bold; background: #f0f8ff; border-radius: 10px; list-style: none; }
         summary::-webkit-details-marker { display: none; }
         summary::after { content: ' ▼'; float: right; }
         details[open] summary::after { content: ' ▲'; }
         .details-content { padding: 10px; }
+        
+        /* 轉移功能區 */
+        .transfer-box { background: #333; color: #eee; padding: 15px; border-radius: 15px; margin-top: 20px; }
+        .transfer-box textarea { background: #222; color: #0f0; border: 1px solid #555; font-family: monospace; font-size: 0.8rem; height: 60px; }
+        
+        /* 自動連結樣式 */
+        .auto-link { color: var(--primary-color); text-decoration: none; border-bottom: 1px dotted; font-weight: bold; }
+        .auto-img { max-width: 100%; border-radius: 8px; margin-top: 5px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
@@ -249,6 +189,18 @@
             <p style="background:#FFF3E0; padding:10px; font-size:0.85rem; border-radius:10px; margin-top:10px;">急難救助專線僅限緊急情況（車禍、搶劫、生命安危）。<br>一般問題請於上班時間聯繫辦事處。</p>
             <h4>《LINE帳號》</h4><p>保平安服務專線 LINE ID: <strong>@Taiwan119</strong></p>
         </div>
+
+        <!-- 🔄 資料轉移區塊 (新功能) -->
+        <div class="card transfer-box">
+            <h3 style="color:#fff;">🔄 電腦 ↔ 手機 資料轉移</h3>
+            <p style="font-size:0.85rem; color:#ccc;">電腦編輯完 -> 複製代碼 -> 傳到手機 -> 貼上代碼 -> 讀取。</p>
+            <textarea id="transfer-area" placeholder="代碼會顯示在這裡..." onclick="this.select()"></textarea>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button class="secondary" onclick="exportData()" style="flex:1;">📤 複製代碼</button>
+                <button class="success" onclick="importData()" style="flex:1;">📥 貼上讀取</button>
+            </div>
+        </div>
+
         <div style="text-align:center; margin-top:20px;"><button onclick="resetApp()" class="danger" style="opacity:0.6;">⚠️ 重置所有資料</button></div>
     </div>
 </div>
@@ -291,8 +243,18 @@
 
     const defaultData = {
         flights: { 
-            outbound: { airline: '星宇航空', number: 'JX741', date: '2026-02-10', time: '10:00', gate: 'B5', pnr: 'AB1234', passengers: [{name:'宸宸', seat:'12A'}, {name:'星星', seat:'12B'}] }, 
-            inbound: { airline: '星宇航空', number: 'JX742', date: '2026-02-15', time: '14:00', gate: 'D2', pnr: 'AB1234', passengers: [{name:'宸宸', seat:'15C'}, {name:'星星', seat:'15D'}] } 
+            outbound: { 
+                airline: '星宇航空', origin: '台北 (TPE)', terminal: '第一航廈', number: 'JX741', 
+                date: '2026-02-10', time: '10:00', boardingTime: '09:30', gate: 'B5', 
+                pnr: 'AB1234', price: '12000', notes: '記得線上報到',
+                passengers: [{name:'宸宸', seat:'12A'}, {name:'星星', seat:'12B'}] 
+            }, 
+            inbound: { 
+                airline: '星宇航空', origin: '曼谷 (BKK)', terminal: '-', number: 'JX742', 
+                date: '2026-02-15', time: '14:00', boardingTime: '13:30', gate: 'D2', 
+                pnr: 'AB1234', price: '12000', notes: '',
+                passengers: [{name:'宸宸', seat:'15C'}, {name:'星星', seat:'15D'}] 
+            } 
         },
         hotels: [
             { name: 'The Standard, Bangkok', address: '114 Narathiwas Road', transport:'BTS Chong Nonsi', checkin:'2026-02-10', checkout:'2026-02-13', voucher:'', photo:'', surroundings:'近最高樓觀景台', notes: '記得要高樓層' }
@@ -311,12 +273,15 @@
         notes: [{ date: '提醒', content: '計程車要記得喊 By Meter (跳表)！' }]
     };
 
-    let appData = JSON.parse(localStorage.getItem('travelApp2026_V5')) || defaultData;
+    let appData = JSON.parse(localStorage.getItem('travelApp2026_V6')) || defaultData;
+    // 版本遷移與資料驗證
     if(!Array.isArray(appData.hotels)) appData.hotels = [appData.hotels || defaultData.hotels[0]];
     if(appData.phrases.length < 10) appData.phrases = defaultPhrases;
+    // 確保航班資料結構完整
+    if(!appData.flights.outbound.origin) appData.flights = defaultData.flights;
 
-    function saveToLocal() { localStorage.setItem('travelApp2026_V5', JSON.stringify(appData)); }
-    function resetApp() { if(confirm("⚠️ 確定重置？所有資料將消失！")) { localStorage.removeItem('travelApp2026_V5'); location.reload(); } }
+    function saveToLocal() { localStorage.setItem('travelApp2026_V6', JSON.stringify(appData)); }
+    function resetApp() { if(confirm("⚠️ 確定重置？所有資料將消失！")) { localStorage.removeItem('travelApp2026_V6'); location.reload(); } }
 
     function switchPage(pageId, navEl) {
         document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
@@ -334,20 +299,72 @@
         renderView(section);
     }
 
+    // --- 自動連結功能 ---
+    function formatContent(text) {
+        if (!text) return '';
+        // 1. 圖片連結 (jpg/png/gif/webp)
+        if (text.match(/\.(jpeg|jpg|gif|png|webp)$/i) && text.startsWith('http')) {
+            return `<a href="${text}" target="_blank"><img src="${text}" class="auto-img" alt="圖片"></a><br><small><a href="${text}" target="_blank" class="auto-link">查看原圖</a></small>`;
+        }
+        // 2. 一般網址連結
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, (url) => `<a href="${url}" target="_blank" class="auto-link">🔗 開啟連結</a>`);
+    }
+
+    // --- 資料轉移功能 ---
+    function exportData() {
+        const dataStr = JSON.stringify(appData);
+        const area = document.getElementById('transfer-area');
+        area.value = dataStr;
+        area.select();
+        // 嘗試複製
+        if(navigator.clipboard) {
+            navigator.clipboard.writeText(dataStr).then(() => alert("✅ 代碼已複製！請貼到另一台設備。"));
+        } else {
+            document.execCommand('copy');
+            alert("✅ 代碼已複製！");
+        }
+    }
+
+    function importData() {
+        const inputStr = prompt("請貼上轉移代碼：");
+        if(inputStr) {
+            try {
+                const newData = JSON.parse(inputStr);
+                // 簡單驗證資料結構
+                if(newData.flights && newData.itinerary) {
+                    appData = newData;
+                    saveToLocal();
+                    alert("✅ 資料同步成功！頁面將重新整理。");
+                    location.reload();
+                } else {
+                    alert("❌ 代碼格式錯誤 (缺少關鍵資料)");
+                }
+            } catch(e) {
+                alert("❌ 代碼格式錯誤，請重新複製。");
+            }
+        }
+    }
+
     const renderers = {
         flights: () => {
-            const flightFields = { airline: '航空公司', number: '航班', date: '日期', time: '時間', gate: '登機門', pnr: '代碼' };
+            const flightFields = { airline: '航空公司', origin:'出發地點', terminal:'航廈', number: '航班號碼', date: '航班日期', time: '出發時間', boardingTime:'登機時間', gate: '登機門', pnr: '訂位代碼', price:'票價', notes:'備註' };
             const genView = (t, d) => {
                 let h = `<h3 class="section-title">${t}</h3>`;
-                for (let k in flightFields) h += `<div class="info-row"><span class="info-label">${flightFields[k]}</span><span class="info-value">${d[k] || '-'}</span></div>`;
-                h += `<div class="info-row"><span class="info-label">旅客/座位</span><span class="info-value">` + (d.passengers || []).map(p => `${p.name}(${p.seat})`).join(', ') + `</span></div>`;
+                for (let k in flightFields) h += `<div class="info-row"><span class="info-label">${flightFields[k]}</span><span class="info-value">${formatContent(d[k] || '-')}</span></div>`;
+                h += `<div class="info-row"><span class="info-label">旅客/座位</span><span class="info-value">` + (d.passengers || []).map(p => `${p.name} (${p.seat})`).join(', ') + `</span></div>`;
                 return h;
             };
-            document.getElementById('view-flights').innerHTML = genView('✈️ 去程', appData.flights.outbound) + '<br>' + genView('✈️ 回程', appData.flights.inbound);
+            document.getElementById('view-flights').innerHTML = genView('✈️ 去程 (Outbound)', appData.flights.outbound) + '<br>' + genView('✈️ 回程 (Inbound)', appData.flights.inbound);
+            
             const genEdit = (type, data) => {
                 let html = '';
-                for (let k in flightFields) html += `<label>${flightFields[k]}</label><input value="${data[k]||''}" onchange="appData.flights.${type}.${k}=this.value">`;
-                html += `<label>旅客資訊 (姓名 / 座位)</label><div id="passengers-${type}">`;
+                for (let k in flightFields) {
+                    html += `<label>${flightFields[k]}</label>`;
+                    if(k==='notes') html += `<textarea onchange="appData.flights.${type}.${k}=this.value">${data[k]||''}</textarea>`;
+                    else html += `<input value="${data[k]||''}" onchange="appData.flights.${type}.${k}=this.value">`;
+                }
+                html += `<label>旅客姓名 與 座位號碼 (可新增刪減)</label><div id="passengers-${type}">`;
                 (data.passengers || []).forEach((p, idx) => {
                     html += `<div style="display:flex; gap:5px; margin-bottom:5px;"><input placeholder="姓名" value="${p.name}" onchange="appData.flights.${type}.passengers[${idx}].name=this.value"><input placeholder="座位" value="${p.seat}" onchange="appData.flights.${type}.passengers[${idx}].seat=this.value"><button class="danger icon-btn" onclick="removePax('${type}', ${idx})">🗑️</button></div>`;
                 });
@@ -364,8 +381,8 @@
                     <div class="info-row"><span class="info-label">地址</span><span class="info-value">${h.address}</span></div>
                     <div class="info-row"><span class="info-label">交通</span><span class="info-value">${h.transport}</span></div>
                     <div class="info-row"><span class="info-label">日期</span><span class="info-value">${h.checkin} ~ ${h.checkout}</span></div>
-                    <div class="info-row"><span class="info-label">憑證</span><span class="info-value">${h.voucher}</span></div>
-                    ${h.photo ? `<div class="info-row"><span class="info-label">照片</span><span class="info-value">${h.photo}</span></div>` : ''}
+                    <div class="info-row"><span class="info-label">憑證</span><span class="info-value">${formatContent(h.voucher)}</span></div>
+                    ${h.photo ? `<div class="info-row"><span class="info-label">照片</span><span class="info-value">${formatContent(h.photo)}</span></div>` : ''}
                     <div class="detail-card" style="background:#FFF9C4;"><div><b>週邊環境：</b>${h.surroundings}</div><div style="margin-top:5px;"><b>備註：</b>${h.notes}</div></div>
                 </div>`).join('');
             const fields = { name:'飯店名稱', address:'地址', transport:'交通方式', checkin:'入住 (YYYY-MM-DD)', checkout:'退房', voucher:'入住憑證', photo:'照片連結', surroundings:'週邊環境', notes:'備註' };
@@ -393,8 +410,8 @@
                             ${i.hours ? `<div class="detail-row"><span class="detail-icon">🕒</span> ${i.hours}</div>` : ''}
                             ${i.mustBuy ? `<div class="detail-row"><span class="detail-icon">🛍️</span> 必買: ${i.mustBuy}</div>` : ''}
                             ${i.menu ? `<div class="detail-row"><span class="detail-icon">🍴</span> 推薦: ${i.menu}</div>` : ''}
-                            ${i.voucher ? `<div class="detail-row"><span class="detail-icon">🎫</span> 憑證: ${i.voucher}</div>` : ''}
-                            ${i.notes ? `<div class="detail-row"><span class="detail-icon">📝</span> 備註: ${i.notes}</div>` : ''}
+                            ${i.voucher ? `<div class="detail-row"><span class="detail-icon">🎫</span> 憑證: ${formatContent(i.voucher)}</div>` : ''}
+                            ${i.notes ? `<div class="detail-row"><span class="detail-icon">📝</span> 備註: ${formatContent(i.notes)}</div>` : ''}
                         </div>
                     </div>`;
                 }).join('')}`).join('');
