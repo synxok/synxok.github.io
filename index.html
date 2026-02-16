@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 宸宸星星曼谷大冒險</title>
+    <!-- PWA 設定 -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#81D4FA">
+    <meta name="theme-color" content="#4AA3DF">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icon-192.png"> 
     
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
     <style>
-        /* --- 1. 基礎設定 --- */
+        /* --- 1. 基礎 CSS --- */
         :root {
             --primary-color: #4AA3DF;
             --primary-dark: #3588c0;
@@ -27,113 +25,6 @@
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* --- 🌟 V29 過場動畫 (Splash Screen) --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* 背景設定：pattern1.png 無縫拼貼，尺寸 300px */
-            background-color: #E1F5FE; 
-            background-image: url('pattern1.png');
-            background-size: 300px; 
-            background-repeat: repeat;
-            z-index: 9999; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1s ease-out, transform 1s ease-out;
-            overflow: hidden;
-        }
-        
-        .splash-content { 
-            text-align: center; 
-            position: relative; 
-            z-index: 50; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        /* 主圖示 */
-        .splash-icon {
-            width: 250px; height: 250px; 
-            border-radius: 50px; 
-            object-fit: cover;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            animation: jelly-slow 3s infinite; 
-            margin-bottom: 30px;
-            background: transparent; 
-        }
-
-        /* 標題容器：Baby Blue 圓角方塊 */
-        .splash-title-box {
-            background-color: #B3E5FC;
-            padding: 15px 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            animation: float 4s ease-in-out infinite;
-            border: 3px solid #fff;
-        }
-
-        /* 標題文字 */
-        .splash-title {
-            font-size: 1.5rem; 
-            color: #0277BD; font-weight: bold;
-            margin: 0;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
-            line-height: 1.4;
-        }
-
-        /* 彩色載入點點 */
-        .loading-dots { display: flex; gap: 12px; justify-content: center; margin-top: 15px; }
-        .loading-dots span {
-            width: 14px; height: 14px; border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            animation: bounce 1.4s infinite ease-in-out both;
-            border: 2px solid #fff;
-        }
-        .loading-dots span:nth-child(1) { animation-delay: -0.32s; background-color: #FF9800; /* 橘色 */ }
-        .loading-dots span:nth-child(2) { animation-delay: -0.16s; background-color: #FFEB3B; /* 黃色 */ }
-        .loading-dots span:nth-child(3) { background-color: #4CAF50; /* 綠色 */ }
-        
-        /* ✈️ 飛機特效 (V29 RWD 優化版) */
-        .splash-plane { 
-            position: absolute;
-            width: 200px; /* 尺寸維持 200px */
-            z-index: 25; 
-            filter: drop-shadow(10px 10px 5px rgba(0,0,0,0.1));
-            /* 時間改為 5秒 */
-            animation: planeFlyUniversalFast 5s linear forwards; 
-        }
-
-        /* --- 動畫 Keyframes --- */
-        /* V29: 使用 vw/vh 定位，確保跨裝置可見且貫穿全螢幕 */
-        @keyframes planeFlyUniversalFast { 
-            0% { 
-                left: -30vw; /* 從畫面左外側開始 */
-                bottom: -30vh; /* 從畫面下外側開始 */
-                transform: rotate(-35deg) scale(0.8); 
-                opacity: 0;
-            } 
-            10% { 
-                opacity: 1; /* 快速淡入 */
-            }
-            90% {
-                opacity: 1;
-            }
-            100% { 
-                left: 130vw; /* 飛到畫面右外側 */
-                bottom: 130vh; /* 飛到畫面上外側 */
-                transform: rotate(-35deg) scale(1.2); 
-                opacity: 0; /* 淡出消失 */
-            } 
-        }
-
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-        @keyframes jelly-slow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-        @keyframes jelly { 0% { transform: scale(1); } 30% { transform: scale(1.25, 0.75); } 40% { transform: scale(0.75, 1.25); } 50% { transform: scale(1.15, 0.85); } 65% { transform: scale(0.95, 1.05); } 75% { transform: scale(1.05, 0.95); } 100% { transform: scale(1); } }
-        @keyframes slideUpFade { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes breathe { 0% { box-shadow: 0 4px 10px rgba(74, 163, 223, 0.3); } 50% { box-shadow: 0 4px 20px rgba(74, 163, 223, 0.6); } 100% { box-shadow: 0 4px 10px rgba(74, 163, 223, 0.3); } }
-
-        /* --- 主程式樣式 --- */
         body {
             font-family: 'Itim', 'Noto Sans TC', cursive, sans-serif;
             margin: 0; padding: 0;
@@ -144,50 +35,88 @@
             overscroll-behavior-y: contain; 
         }
 
-        /* Header */
+        /* --- 🌟 豪華過場動畫 (Splash Screen) --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #B3E5FC 0%, #E1F5FE 100%); /* Baby Blue */
+            background-image: url('pattern1.png'); /* 若無此圖顯示漸層 */
+            background-size: 300px; background-blend-mode: overlay;
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease-out;
+            text-align: center;
+        }
+        .splash-icon {
+            width: 250px; height: 250px; border-radius: 50px; object-fit: cover;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+            background: white;
+        }
+        .splash-plane { 
+            position: absolute; width: 200px; z-index: 25; filter: drop-shadow(10px 10px 5px rgba(0,0,0,0.1));
+            animation: planeFly 5s linear forwards; pointer-events: none;
+        }
+        @keyframes planeFly { 
+            0% { left: -30vw; bottom: -30vh; transform: rotate(-35deg) scale(0.8); } 
+            100% { left: 130vw; bottom: 130vh; transform: rotate(-35deg) scale(1.2); } 
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        
+        .loading-dots span {
+            display: inline-block; width: 15px; height: 15px; border-radius: 50%; margin: 0 5px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .loading-dots span:nth-child(1) { background: #FF9800; animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { background: #FFEB3B; animation-delay: -0.16s; }
+        .loading-dots span:nth-child(3) { background: #4CAF50; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        #start-btn {
+            margin-top: 30px; font-size: 1.5rem; padding: 12px 50px; 
+            background: var(--accent-color); color: #5d4037; border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); border: none; cursor: pointer;
+            animation: breathe 2s infinite; font-weight: bold;
+        }
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        /* --- 主介面動態特效 --- */
         header {
-            background: rgba(255, 255, 255, 0.92); padding: 12px 10px; text-align: center;
+            background: rgba(255, 255, 255, 0.92); padding: 15px 10px; text-align: center;
             border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
             box-shadow: 0 4px 15px rgba(74, 163, 223, 0.15); 
             position: sticky; top: 0; z-index: 100;
             padding-top: env(safe-area-inset-top); 
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
         }
         h1 { 
             margin: 0; font-size: 1.2rem; color: var(--primary-color); 
             display: flex; align-items: center; justify-content: center; gap: 8px; 
-            padding-top: 5px; text-shadow: 1px 1px 0px #fff;
-            animation: float 3.5s ease-in-out infinite; /* 整體漂浮 */
+            animation: float 4s ease-in-out infinite; padding-top: 5px;
         }
-        /* 圖示設定 */
         .header-icon { height: 35px; width: auto; mix-blend-mode: multiply; }
-        /* 右側圖示 (大象) */
-        .header-icon-right { height: 35px; width: auto; object-fit: contain; } 
-        
+
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* 卡片樣式 */
         .card {
             background: var(--card-bg); border-radius: 25px; padding: 20px; margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 2px solid #fff; 
-            transition: transform 0.2s;
-            animation: slideUpFade 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: transform 0.2s; animation: slideUp 0.5s;
         }
-        
-        /* 按鈕樣式 */
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Q 彈按鈕 */
         button {
             background-color: var(--primary-color); color: white; border: none; padding: 10px 20px;
             border-radius: 50px; font-family: inherit; cursor: pointer; font-size: 0.95rem; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(74, 163, 223, 0.3); transition: all 0.3s;
-            position: relative; overflow: hidden;
+            box-shadow: 0 4px 10px rgba(74, 163, 223, 0.3); transition: all 0.2s;
         }
-        button:active { animation: jelly 0.4s; transform: scale(0.95); }
+        button:active { transform: scale(0.9); }
         button.secondary { background-color: #FFB74D; box-shadow: 0 4px 10px rgba(255, 183, 77, 0.4); }
         button.danger { background-color: #FF7043; box-shadow: 0 4px 10px rgba(255, 112, 67, 0.4); }
         button.success { background-color: #66BB6A; box-shadow: 0 4px 10px rgba(102, 187, 106, 0.4); }
         button.outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); box-shadow: none; }
         button.icon-btn { padding: 6px 12px; border-radius: 15px; font-size: 1.1rem; }
-        button.full-width { width: 100%; margin-top: 15px; animation: breathe 3s infinite ease-in-out; }
+        button.full-width { width: 100%; margin-top: 15px; animation: breathe 3s infinite; }
+        @keyframes breathe { 0%, 100% { box-shadow: 0 4px 10px rgba(74, 163, 223, 0.3); } 50% { box-shadow: 0 4px 20px rgba(74, 163, 223, 0.6); } }
 
         input, textarea, select {
             width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 2px solid #eee;
@@ -196,7 +125,7 @@
         input:focus, textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 163, 223, 0.1); }
         textarea { resize: vertical; min-height: 80px; }
         label { font-weight: bold; color: #555; font-size: 0.9rem; display: block; margin-top: 12px; }
-        
+
         /* 底部導航 */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height);
@@ -213,14 +142,11 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .nav-item.active { background-color: rgba(74, 163, 223, 0.15); color: var(--primary-color); font-weight: bold; transform: translateY(-5px); }
-        .nav-item.active .nav-icon-img { animation: jelly 0.6s; } 
         .nav-icon-img { width: 34px; height: 34px; object-fit: contain; margin-bottom: 4px; display: block; mix-blend-mode: multiply; }
         
-        /* 頁面切換 */
-        .page { display: none; animation: slideUpFade 0.4s ease-out; }
+        .page { display: none; }
         .page.active { display: block; }
         
-        /* 內容樣式 */
         .info-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 12px 0; align-items: baseline; }
         .info-label { color: #888; font-size: 0.9rem; min-width: 90px; font-weight: bold; }
         .info-value { font-weight: 500; text-align: right; flex-grow: 1; word-break: break-all; color: #444; }
@@ -229,63 +155,48 @@
             border-bottom: 3px solid var(--accent-color); padding-bottom: 6px; margin: 20px 0 15px 0; display: inline-block; 
         }
         .edit-controls { text-align: right; margin-bottom: 10px; }
-        .edit-group { 
-            background: #f8fbfd; padding: 20px; border-radius: 20px; margin-bottom: 15px; 
-            border: 2px solid #eef6fb; position: relative; animation: popIn 0.3s;
-        }
+        .edit-group { background: #f8fbfd; padding: 20px; border-radius: 20px; margin-bottom: 15px; border: 2px solid #eef6fb; position: relative; }
         .delete-btn-corner { position: absolute; top: 10px; right: 10px; font-size: 0.8rem; background: #FF7043; color: white; padding: 4px 10px; border-radius: 15px;}
         
-        /* 行程分頁 */
-        .date-tabs-container { 
-            display: flex; overflow-x: auto; padding: 10px 5px; margin-bottom: 10px; gap: 10px; 
-            -ms-overflow-style: none; scrollbar-width: none; 
-        }
-        .date-tabs-container::-webkit-scrollbar { display: none; }
-        .date-tab {
-            flex: 0 0 auto; padding: 8px 14px; background: #fff; border: 2px solid #eee; 
-            border-radius: 18px; font-size: 0.85rem; color: #888; cursor: pointer; transition: 0.3s;
-            min-width: 85px; text-align: center; display: flex; flex-direction: column; justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .date-tab.active { 
-            background: var(--primary-color); color: white; border-color: var(--primary-color); 
-            box-shadow: 0 4px 12px rgba(74, 163, 223, 0.4); transform: translateY(-2px) scale(1.05);
-        }
-        .day-label { font-size: 1rem; font-weight: bold; display: block; margin-bottom: 2px; }
-        .day-date { font-size: 0.75rem; opacity: 0.9; font-family: sans-serif; }
+        /* 行程分頁 (Tabs) */
+        .date-tabs-container { display: flex; overflow-x: auto; gap: 10px; padding: 5px; margin-bottom: 15px; }
+        .date-tab { flex: 0 0 auto; padding: 8px 15px; background: #fff; border: 2px solid #eee; border-radius: 20px; font-size: 0.9rem; color: #888; cursor: pointer; text-align: center; transition: 0.3s; }
+        .date-tab.active { background: var(--primary-color); color: white; border-color: var(--primary-color); transform: scale(1.05); box-shadow: 0 4px 10px rgba(74, 163, 223, 0.3); }
 
-        .timeline-item { border-left: 4px solid var(--primary-color); padding-left: 20px; margin-left: 10px; margin-bottom: 25px; position: relative; animation: slideUpFade 0.5s; }
+        /* 行程項目 */
+        .timeline-item { border-left: 4px solid var(--primary-color); padding-left: 20px; margin-left: 10px; margin-bottom: 25px; position: relative; }
         .timeline-item::before { 
-            content: '★'; position: absolute; left: -10px; top: 0; color: var(--accent-color); background: #fff; 
-            border-radius: 50%; width: 20px; height: 20px; text-align: center; line-height: 22px; border: 2px solid var(--bg-color);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            content: '★'; position: absolute; left: -11px; top: 0; color: var(--accent-color); background: #fff; 
+            border-radius: 50%; width: 22px; height: 22px; text-align: center; line-height: 24px; border: 2px solid var(--bg-color);
         }
+        /* 淺藍色行程底框 */
         .timeline-header-box { 
             background: #E1F5FE; padding: 12px 15px; border-radius: 15px; margin-bottom: 10px; 
             display: inline-block; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid var(--primary-dark);
         }
-        
-        .detail-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 15px; margin-top: 8px; font-size: 0.95rem; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .detail-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 15px; margin-top: 8px; font-size: 0.95rem; }
         .detail-row { display: flex; gap: 10px; margin-bottom: 8px; align-items: flex-start; }
         .detail-icon { color: var(--primary-color); font-weight: bold; min-width: 24px; text-align: center;}
+        
+        /* 吐司通知 */
+        #toast-container { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
+        .toast { background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 30px; margin-top: 10px; animation: slideUp 0.3s; backdrop-filter: blur(5px); }
 
-        /* 地圖 & MRT */
-        #interactive-map { height: 60vh; width: 100%; border-radius: 20px; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        /* 其他通用樣式 */
+        .trans-box { background: #f9f9f9; padding: 15px; border-radius: 15px; margin-bottom: 10px; }
         #mrt-container { overflow: auto; border: 4px solid var(--primary-color); border-radius: 20px; height: 60vh; background: white; position: relative; -webkit-overflow-scrolling: touch; }
         .zoom-controls { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; margin-top: 5px;}
         .zoom-btn { width: 50px; height: 50px; border-radius: 50%; background: var(--primary-color); color: white; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid #fff; padding: 0; transition: 0.2s; }
         .zoom-btn:active { transform: scale(0.9); }
         .zoom-btn.reset { background: #607D8B; font-size: 0.85rem; font-weight: bold; }
         
-        /* 購物 & 票券 */
-        .shopping-item { display: flex; align-items: flex-start; padding: 15px 10px; border-bottom: 1px dashed #ddd; transition: background 0.2s; animation: popIn 0.3s; }
-        .shopping-item:active { background-color: #f0f8ff; }
-        .shopping-item.checked { opacity: 0.5; text-decoration: line-through; filter: grayscale(0.8); }
+        .shopping-item { display: flex; align-items: flex-start; padding: 15px 10px; border-bottom: 1px dashed #ddd; transition: background 0.2s; }
+        .shopping-item.checked { opacity: 0.5; text-decoration: line-through; filter: grayscale(1); }
         .check-circle { width: 26px; height: 26px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; cursor: pointer; background: white; flex-shrink: 0; margin-top: 3px; transition: all 0.3s; }
-        .checked .check-circle { background: #4CAF50; border-color: #4CAF50; color: white; transform: scale(1.1) rotate(360deg); }
+        .checked .check-circle { background: #4CAF50; border-color: #4CAF50; color: white; transform: scale(1.1); }
         .shopping-cat { display: inline-block; background: #E1F5FE; color: var(--primary-color); padding: 3px 8px; border-radius: 8px; font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
         
-        .ticket-card { border: 2px dashed var(--primary-color); background: #f4fbff; border-radius: 20px; padding: 20px; margin-bottom: 15px; position: relative; animation: slideUpFade 0.5s; }
+        .ticket-card { border: 2px dashed var(--primary-color); background: #f4fbff; border-radius: 20px; padding: 20px; margin-bottom: 15px; position: relative; }
         .ticket-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px; }
         .ticket-title { font-size: 1.15rem; font-weight: bold; color: var(--primary-color); }
         .ticket-info-row { display: flex; margin-bottom: 6px; align-items: baseline; }
@@ -298,67 +209,47 @@
         .emergency-section p { margin: 5px 0; line-height: 1.5; }
         
         /* 互動元件 */
-        details { margin-bottom: 10px; background: white; border-radius: 12px; border: 1px solid #eee; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: 0.3s; }
-        summary { padding: 12px 15px; cursor: pointer; font-weight: bold; background: #fcfcfc; list-style: none; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-        summary:hover { background: #f0f8ff; }
-        summary::-webkit-details-marker { display: none; }
-        summary::after { content: '▼'; font-size: 0.8rem; color: #888; transition: 0.3s; }
-        details[open] summary::after { transform: rotate(180deg); color: var(--primary-color); }
-        .details-content { padding: 15px; background: #fff; border-top: 1px solid #eee; }
-        
-        /* 轉移與工具 */
-        .transfer-box { background: #37474F; color: #eceff1; padding: 20px; border-radius: 20px; margin-top: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        details { margin-bottom: 10px; background: white; border-radius: 12px; border: 1px solid #eee; overflow: hidden; }
+        summary { padding: 12px 15px; cursor: pointer; font-weight: bold; background: #fcfcfc; list-style: none; display: flex; justify-content: space-between; }
+        .details-content { padding: 15px; border-top: 1px solid #eee; }
+        .transfer-box { background: #37474F; color: #eceff1; padding: 20px; border-radius: 20px; margin-top: 20px; }
         .transfer-box textarea { background: #263238; color: #69F0AE; border: 1px solid #546E7A; font-family: monospace; font-size: 0.85rem; height: 60px; }
         .auto-link { color: var(--primary-color); text-decoration: none; border-bottom: 1px dotted; font-weight: bold; }
         .auto-img { max-width: 100%; border-radius: 10px; margin-top: 8px; border: 1px solid #eee; display: block; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .file-upload-btn { background: #fff; color: #555; font-size: 0.9rem; padding: 10px 15px; border: 2px dashed #ccc; border-radius: 12px; width: 100%; margin-top: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .file-upload-btn:hover { border-color: var(--primary-color); color: var(--primary-color); background: #f0f8ff; }
-        
-        /* 吐司訊息 */
-        #toast-container { position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; width: max-content; }
-        .toast { 
-            background: rgba(0, 0, 0, 0.85); color: white; padding: 12px 30px; border-radius: 50px; 
-            margin-top: 10px; font-size: 1rem; animation: slideUpFade 0.4s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px);
-        }
+        .file-upload-btn { background: #f0f0f0; color: #333; font-size: 0.8rem; padding: 5px 10px; border: 1px dashed #999; width: auto; margin-top: 5px; display: inline-block; cursor: pointer; text-align: center; }
     </style>
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
-<!-- 🌟 V29 豪華 Baby Blue 過場動畫 -->
+<!-- 🌟 豪華過場動畫 -->
 <div id="splash-screen">
-    <div class="splash-content">
-        <!-- 放大且無外框的圖示 -->
-        <img src="icon.png" alt="App Icon" class="splash-icon" onerror="this.src='TH flag.png'">
-        <div class="splash-title-box">
-            <div class="splash-title">2026 宸宸星星<br>曼谷大冒險</div>
-        </div>
-        <!-- 彩色圓點 (橘黃綠) -->
-        <div class="loading-dots">
-            <span></span><span></span><span></span>
-        </div>
-    </div>
-    <!-- 背景特效：飛機 (airplane1.png) -->
-    <img src="airplane1.png" alt="Airplane" class="splash-plane">
+    <!-- 飛機特效 -->
+    <img src="airplane1.png" alt="Plane" class="splash-plane" onerror="this.style.display='none'">
+    <!-- 中央大圖示 -->
+    <img src="icon.png" alt="Icon" class="splash-icon" onerror="this.src='TH flag.png'">
+    <h1 style="color:#0277BD; text-shadow:none;">2026 宸宸星星<br>曼谷大冒險</h1>
+    <!-- 載入點點 -->
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+    <!-- 開始按鈕 -->
+    <button id="start-btn" onclick="startApp()">🚀 出發！</button>
 </div>
 
-<header>
-    <h1>
-        <!-- 左邊國旗 -->
-        <img src="TH flag.png" class="header-icon" alt="Thai Flag">
-        2026 宸宸星星曼谷大冒險
-        <!-- 右邊大象 (使用 elephant.png) -->
-        <img src="elephant.png" class="header-icon-right" alt="Elephant">
-    </h1>
-</header>
+<!-- 音效元件 -->
+<audio id="audio-opening"></audio>
+<audio id="audio-bgm" loop></audio>
+<!-- 點擊音效 -->
+<audio id="audio-click"></audio>
+<!-- 頁面切換音效 -->
+<audio id="audio-page-effect"></audio>
 
 <div id="toast-container"></div>
 
+<header>
+    <h1><span>🐘</span> 2026 宸宸星星曼谷大冒險 <img src="TH flag.png" class="header-icon" alt="Thai Flag"></h1>
+</header>
+
 <div class="container">
-    <!-- 航班 -->
-    <div id="page-flights" class="page active">
+    <div id="page-flights" class="page">
         <div class="card">
             <div class="edit-controls"><button onclick="toggleEdit('flights')" id="btn-edit-flights">✏️ 編輯</button></div>
             <div id="view-flights"></div>
@@ -370,7 +261,6 @@
         </div>
     </div>
     
-    <!-- 飯店 -->
     <div id="page-hotel" class="page">
         <div class="card">
             <div class="edit-controls"><button onclick="toggleEdit('hotel')" id="btn-edit-hotel">✏️ 編輯</button></div>
@@ -383,10 +273,9 @@
         </div>
     </div>
     
-    <!-- 行程 -->
-    <div id="page-itinerary" class="page">
+    <div id="page-itinerary" class="page active">
         <div class="edit-controls"><button onclick="toggleEdit('itinerary')" id="btn-edit-itinerary">✏️ 編輯模式</button></div>
-        <div id="itinerary-tabs" class="date-tabs-container"></div> <!-- 分頁 -->
+        <div id="itinerary-tabs" class="date-tabs-container"></div>
         <div id="view-itinerary"></div>
         <div id="edit-itinerary" style="display:none;">
             <div id="itinerary-form-container"></div>
@@ -394,17 +283,7 @@
             <button onclick="saveData('itinerary')" class="full-width">💾 全部儲存</button>
         </div>
     </div>
-
-    <!-- 地圖 -->
-    <div id="page-interactive-map" class="page">
-        <div class="card">
-            <h3>🗺️ 景點互動地圖</h3>
-            <div id="interactive-map"></div>
-            <p style="font-size:0.8rem; color:#999; margin-top:10px; text-align:center;">* 在行程中輸入座標，就會自動標示在這裡喔！</p>
-        </div>
-    </div>
     
-    <!-- 捷運 -->
     <div id="page-mrt" class="page">
         <div class="card">
             <h3>🚇 曼谷捷運圖</h3>
@@ -413,13 +292,14 @@
                 <button class="zoom-btn reset" onclick="zoomMap(0)">重置</button>
                 <button class="zoom-btn" onclick="zoomMap(25)">＋</button>
             </div>
+            <p style="color:#666; font-size:0.8rem; text-align:center; margin-bottom:5px;">💡 放大後可滑動查看</p>
             <div id="mrt-container">
                 <img id="mrt-img" src="bangkok_mrt_2025.png" alt="Bangkok MRT" style="width: 100%; min-width: 100%; transition: width 0.3s ease;" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Bangkok_Mass_Transit_Network_Map.png/1024px-Bangkok_Mass_Transit_Network_Map.png';this.alt='本地圖片未找到'">
             </div>
         </div>
     </div>
     
-    <!-- 票券 -->
+    <!-- 票券頁面 -->
     <div id="page-tickets" class="page">
         <div class="card">
             <div class="edit-controls"><button onclick="toggleEdit('tickets')" id="btn-edit-tickets">✏️ 編輯</button></div>
@@ -432,7 +312,6 @@
         </div>
     </div>
 
-    <!-- 翻譯 -->
     <div id="page-translate" class="page">
         <div class="card">
             <h3>🇹🇭 翻譯小幫手</h3>
@@ -442,7 +321,6 @@
         </div>
     </div>
     
-    <!-- 泰文 -->
     <div id="page-phrases" class="page">
         <div class="card">
             <div class="edit-controls"><button onclick="toggleEdit('phrases')" id="btn-edit-phrases">✏️ 管理</button></div>
@@ -455,7 +333,6 @@
         </div>
     </div>
     
-    <!-- 必買 -->
     <div id="page-shopping" class="page">
         <div class="card">
             <div class="edit-controls"><button onclick="toggleEdit('shopping')" id="btn-edit-shopping">✏️ 編輯清單</button></div>
@@ -468,7 +345,6 @@
         </div>
     </div>
     
-    <!-- 筆記 -->
     <div id="page-notes" class="page">
         <div class="card">
             <div class="edit-controls"><button onclick="toggleEdit('notes')" id="btn-edit-notes">✏️ 寫筆記</button></div>
@@ -481,7 +357,6 @@
         </div>
     </div>
     
-    <!-- 急難救助 -->
     <div id="page-emergency" class="page">
         <div class="card emergency-section" style="border-left: 5px solid #FF7043;">
             <h3 style="color:#D84315; text-align:center;">🆘 急難救助</h3>
@@ -496,64 +371,68 @@
             <h4>《LINE帳號》</h4><p>保平安服務專線 LINE ID: <strong>@Taiwan119</strong></p>
         </div>
 
-        <!-- 🔄 資料轉移區塊 (檔案模式) -->
+        <!-- 🔄 資料轉移區塊 -->
         <div class="card transfer-box">
-            <h3 style="color:#fff;">🔄 備份與還原 (JSON 檔案)</h3>
+            <h3 style="color:#fff;">🔄 備份與同步 (給家人)</h3>
             <div style="font-size:0.9rem; color:#ddd; margin-bottom:10px; line-height:1.6;">
                 <b>操作方式：</b><br>
-                1. 點擊 <span style="color:#FFD700;">📤 匯出備份</span> (下載 .json 檔)<br>
-                2. 將檔案傳送到另一台裝置<br>
-                3. 在另一台裝置點擊 <span style="color:#4CAF50;">📥 匯入備份</span><br>
-                4. 選取該 .json 檔案即可還原
+                1. 點擊 <span style="color:#FFD700;">📤 複製代碼</span> (匯出資料)<br>
+                2. 傳給手機 / 家人<br>
+                3. 在另一台裝置貼上代碼<br>
+                4. 點擊 <span style="color:#4CAF50;">📥 貼上讀取</span> (覆蓋資料)
             </div>
-            
+            <textarea id="transfer-area" placeholder="代碼顯示區..." onclick="this.select()"></textarea>
             <div style="display:flex; gap:10px; margin-top:10px;">
-                <button class="secondary" onclick="exportJSON()" style="flex:1;">📤 匯出備份檔</button>
-                <button class="success" onclick="triggerImport()" style="flex:1;">📥 匯入備份檔</button>
+                <button class="secondary" onclick="exportData()" style="flex:1;">📤 複製代碼</button>
+                <button class="success" onclick="importData()" style="flex:1;">📥 貼上讀取</button>
             </div>
-            <input type="file" id="import-file" style="display: none;" accept=".json" onchange="handleFileImport(this)">
         </div>
 
         <div style="text-align:center; margin-top:20px;"><button onclick="resetApp()" class="danger" style="opacity:0.6;">⚠️ 重置所有資料</button></div>
     </div>
 </div>
 
-<!-- 底部導航 -->
 <nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchPage('flights', this)"><img src="airplane.png" class="nav-icon-img"><span>航班</span></div>
-    <div class="nav-item" onclick="switchPage('hotel', this)"><img src="hotel.png" class="nav-icon-img"><span>飯店</span></div>
-    <div class="nav-item" onclick="switchPage('itinerary', this)"><img src="liti.png" class="nav-icon-img"><span>行程</span></div>
-    
-    <!-- 地圖按鈕 (倒數第二) -->
-    <div class="nav-item" onclick="switchPage('interactive-map', this)"><img src="map.png" class="nav-icon-img"><span>地圖</span></div>
-
-    <div class="nav-item" onclick="switchPage('mrt', this)"><img src="train.png" class="nav-icon-img"><span>捷運</span></div>
-    <div class="nav-item" onclick="switchPage('tickets', this)"><img src="ticket.png" class="nav-icon-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjODg4IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIgOWE1IDUgMCAwIDAgMTAgMHY2YTUgNSAwIDAgMCAxMCAwdi02YTUgNSAwIDAgMC0xMCAwVjJINnY3eiIvPjwvc3ZnPg=='"><span>票券</span></div>
-    <div class="nav-item" onclick="switchPage('translate', this)"><img src="man.png" class="nav-icon-img"><span>翻譯</span></div>
-    <div class="nav-item" onclick="switchPage('phrases', this)"><img src="TH flag.png" class="nav-icon-img"><span>泰文</span></div>
-    <div class="nav-item" onclick="switchPage('shopping', this)"><img src="shoppingbag.png" class="nav-icon-img"><span>必買</span></div>
-    <div class="nav-item" onclick="switchPage('notes', this)"><img src="note.png" class="nav-icon-img"><span>筆記</span></div>
-    <div class="nav-item" onclick="switchPage('emergency', this)"><img src="SOS.png" class="nav-icon-img"><span>求助</span></div>
+    <div class="nav-item active" onclick="switchPage('flights', this)" data-page="flights"><img src="airplane.png" class="nav-icon-img"><span>航班</span></div>
+    <div class="nav-item" onclick="switchPage('hotel', this)" data-page="hotel"><img src="hotel.png" class="nav-icon-img"><span>飯店</span></div>
+    <div class="nav-item active" onclick="switchPage('itinerary', this)" data-page="itinerary"><img src="liti.png" class="nav-icon-img"><span>行程</span></div>
+    <div class="nav-item" onclick="switchPage('mrt', this)" data-page="mrt"><img src="train.png" class="nav-icon-img"><span>捷運</span></div>
+    <!-- 票券按鈕 -->
+    <div class="nav-item" onclick="switchPage('tickets', this)" data-page="tickets"><img src="ticket.png" class="nav-icon-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjODg4IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIgOWE1IDUgMCAwIDAgMTAgMHY2YTUgNSAwIDAgMCAxMCAwdi02YTUgNSAwIDAgMC0xMCAwVjJINnY3eiIvPjwvc3ZnPg=='"><span>票券</span></div>
+    <div class="nav-item" onclick="switchPage('translate', this)" data-page="translate"><img src="man.png" class="nav-icon-img"><span>翻譯</span></div>
+    <div class="nav-item" onclick="switchPage('phrases', this)" data-page="phrases"><img src="TH flag.png" class="nav-icon-img"><span>泰文</span></div>
+    <div class="nav-item" onclick="switchPage('shopping', this)" data-page="shopping"><img src="shoppingbag.png" class="nav-icon-img"><span>必買</span></div>
+    <div class="nav-item" onclick="switchPage('notes', this)" data-page="notes"><img src="note.png" class="nav-icon-img"><span>筆記</span></div>
+    <div class="nav-item" onclick="switchPage('emergency', this)" data-page="emergency"><img src="SOS.png" class="nav-icon-img"><span>求助</span></div>
 </nav>
 
 <script>
-    const STORAGE_KEY = 'TravelApp_2026_V29_RWDPlane'; // 🚀 V29 更新 KEY
+    const STORAGE_KEY = 'TravelApp_2026_V19_Final'; 
+    
+    // --- 音效檔案設定 ---
+    const AUDIO_FILES = {
+        opening: 'opening.mp3', 
+        bgm: 'bgm.mp3',         
+        click: 'click.mp3',     
+        pages: {
+            'flights': 'flights.mp3',
+            'hotel': 'hotel.mp3',
+            'itinerary': 'itinerary.mp3',
+            'mrt': 'mrt.mp3',
+            'tickets': 'tickets.mp3',
+            'translate': 'translate.mp3',
+            'phrases': 'phrases.mp3',
+            'shopping': 'shopping.mp3',
+            'notes': 'notes.mp3',
+            'emergency': 'emergency.mp3'
+        }
+    };
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
         });
     }
-
-    // 🌟 Splash Screen 邏輯 (延遲 5秒)
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
-            splash.style.transform = 'scale(1.1)';
-            setTimeout(() => { splash.style.display = 'none'; }, 1000); 
-        }, 5000); 
-    });
 
     const defaultPhrases = [
         {zh:"你好", th:"Sawasdee (krub/ka)"}, {zh:"謝謝", th:"Khop khun (krub/ka)"}, {zh:"對不起", th:"Kor tot"}, {zh:"沒關係", th:"Mai pen rai"},
@@ -576,10 +455,7 @@
             inbound: { airline: '星宇航空', origin: '曼谷 (BKK)', terminal: '-', number: 'JX742', date: '2026-02-15', time: '14:00', boardingTime: '13:30', gate: 'D2', pnr: 'AB1234', price: '12000', notes: '', passengers: [{name:'宸宸', seat:'15C'}, {name:'星星', seat:'15D'}] } 
         },
         hotels: [{ name: 'The Standard, Bangkok', address: '114 Narathiwas Road', transport:'BTS Chong Nonsi', checkin:'2026-02-10', checkout:'2026-02-13', voucher:'', photo:'', surroundings:'近最高樓觀景台', notes: '記得要高樓層' }],
-        itinerary: [
-            { date: '2026-02-10', summary: '抵達曼谷', items: [{ time:'14:00', title:'飯店 Check-in', desc:'辦理入住手續', transport:'機場快線', lat:'13.7228', lng:'100.5292', mapUrl:'', hours:'24H', mustBuy:'', menu:'', voucher:'', photo:'', notes:'' }] },
-            { date: '2026-02-11', summary: '河岸一日遊', items: [{ time:'09:00', title:'鄭王廟', desc:'必拍地標', transport:'船', lat:'13.7437', lng:'100.4888', mapUrl:'', hours:'', mustBuy:'', menu:'', voucher:'', photo:'', notes:'' }] }
-        ],
+        itinerary: [{ date: '2026-02-10', summary: '抵達曼谷', items: [{ time:'14:00', title:'飯店 Check-in', desc:'辦理入住手續', transport:'機場快線', mapUrl:'', hours:'24H', mustBuy:'', menu:'', voucher:'', photo:'', notes:'' }] }],
         tickets: [], 
         phrases: defaultPhrases,
         shopping: [{ category:'飲料', item:'手標奶茶', price:'140', location:'Big C', image:'', notes:'半糖剛好', done: false }],
@@ -590,12 +466,10 @@
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         appData = stored ? JSON.parse(stored) : defaultData;
-    } catch(e) {
-        console.log('Data reset');
-        appData = defaultData;
-    }
+    } catch(e) { appData = defaultData; }
 
-    if(!appData.flights || !appData.flights.outbound) appData.flights = defaultData.flights;
+    // 資料修復
+    if(!appData.flights) appData.flights = defaultData.flights;
     if(!Array.isArray(appData.hotels)) appData.hotels = defaultData.hotels;
     if(!Array.isArray(appData.itinerary)) appData.itinerary = defaultData.itinerary;
     if(!Array.isArray(appData.tickets)) appData.tickets = []; 
@@ -603,53 +477,73 @@
     if(!Array.isArray(appData.shopping)) appData.shopping = defaultData.shopping;
     if(!Array.isArray(appData.notes)) appData.notes = defaultData.notes;
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-
-    let currentItineraryDayIndex = 0;
-    let map = null;
-    let markers = [];
-
-    // --- ✨ 吐司通知 ---
-    function showToast(message) {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `<span>✨</span> ${message}`;
-        container.appendChild(toast);
-        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 2000);
-    }
-
-    function saveToLocal() { 
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); 
-        } catch(e) {
-            alert('⚠️ 儲存失敗！圖片檔案可能過大。');
-        }
-    }
+    appData.shopping.forEach(s => { if(s.image === undefined) s.image = ''; if(s.category === undefined) s.category = ''; if(s.notes === undefined) s.notes = ''; });
+    appData.itinerary.forEach(day => { if(!day.items) day.items = []; day.items.forEach(item => { if(item.photo === undefined) item.photo = ''; }); });
     
-    function saveData(section) { 
-        saveToLocal(); 
-        showToast('儲存成功！'); 
-        if(section === 'itinerary') renderView('itinerary'); 
-        toggleEdit(section); 
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    let currentItineraryDayIndex = 0;
+
+    function saveToLocal() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); } catch(e) { showToast('⚠️ 儲存失敗！'); } }
+    function saveData(section) { saveToLocal(); showToast('✨ 儲存成功！'); toggleEdit(section); if(section==='itinerary') renderView('itinerary');}
+    function saveImage(section) { saveToLocal(); showToast('圖片上傳成功！'); }
+    function showToast(msg) {
+        const c = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = 'toast'; t.innerText = msg;
+        c.appendChild(t);
+        setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),500); }, 2000);
+    }
+    function resetApp() { if(confirm("⚠️ 確定重置？")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } }
+
+    // --- 音效邏輯 ---
+    function initAudio() {
+        const audioOpening = document.getElementById('audio-opening');
+        const audioBGM = document.getElementById('audio-bgm');
+        const audioClick = document.getElementById('audio-click');
+        const audioPage = document.getElementById('audio-page-effect');
+
+        audioOpening.src = AUDIO_FILES.opening;
+        audioBGM.src = AUDIO_FILES.bgm;
+        audioClick.src = AUDIO_FILES.click;
+        audioBGM.volume = 0.3;
+
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'start-btn') return;
+            if (e.target.closest('button.outline') || e.target.classList.contains('outline')) return;
+
+            const navItem = e.target.closest('.nav-item');
+            if (navItem) {
+                const pageId = navItem.getAttribute('data-page');
+                const soundFile = AUDIO_FILES.pages[pageId];
+                if(soundFile) {
+                    audioPage.src = soundFile;
+                    audioPage.play().catch(()=>{});
+                } else {
+                    const clone = audioClick.cloneNode();
+                    clone.volume = 0.5; clone.play().catch(()=>{});
+                }
+            }
+        });
     }
 
-    function saveImage(section) { saveToLocal(); showToast('圖片上傳成功！'); } 
-    function resetApp() { if(confirm("⚠️ 確定重置？所有資料將消失！")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } }
+    function startApp() {
+        const screen = document.getElementById('splash-screen');
+        screen.style.opacity = '0';
+        setTimeout(() => screen.style.display = 'none', 800);
+        const openAudio = document.getElementById('audio-opening');
+        if(openAudio.src && openAudio.paused) openAudio.play().catch(e=>{});
+        const bgm = document.getElementById('audio-bgm');
+        if(bgm.src) bgm.play().catch(e=>{});
+    }
 
     function switchPage(pageId, navEl) {
         document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
         document.getElementById('page-' + pageId).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         navEl.classList.add('active');
-        
-        if(pageId === 'interactive-map') {
-            setTimeout(initMap, 200); 
-        }
-        
         renderView(pageId);
     }
-
+    
     function toggleEdit(section) {
         const v = document.getElementById(`view-${section}`);
         const e = document.getElementById(`edit-${section}`);
@@ -659,44 +553,12 @@
         renderView(section);
     }
 
-    function initMap() {
-        if(map) {
-            map.invalidateSize();
-            loadMapMarkers();
-            return;
-        }
-        map = L.map('interactive-map').setView([13.7563, 100.5018], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-        loadMapMarkers();
-    }
-
-    function loadMapMarkers() {
-        markers.forEach(m => map.removeLayer(m));
-        markers = [];
-        appData.itinerary.forEach(day => {
-            day.items.forEach(item => {
-                if(item.lat && item.lng) {
-                    const marker = L.marker([item.lat, item.lng])
-                        .addTo(map)
-                        .bindPopup(`<b>${item.time} ${item.title}</b><br>${item.desc}`);
-                    markers.push(marker);
-                }
-            });
-        });
-    }
-
-    function switchItineraryDay(index) {
-        currentItineraryDayIndex = index;
-        renderView('itinerary');
-    }
-
+    function switchItineraryDay(index) { currentItineraryDayIndex = index; renderView('itinerary'); }
     function formatContent(text) {
         if (!text) return '';
         const str = String(text); 
         if (str.startsWith('data:image')) return `<img src="${str}" class="auto-img" alt="圖片"><br><small>本地圖片</small>`;
-        if (str.match(/\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i) && str.startsWith('http')) return `<a href="${str}" target="_blank"><img src="${str}" class="auto-img" alt="圖片"></a><br><small><a href="${str}" target="_blank" class="auto-link">查看原圖</a></small>`;
+        if (str.match(/\.(jpeg|jpg|gif|png|webp)(\?.*)?$/i) && str.startsWith('http')) return `<a href="${str}" target="_blank"><img src="${str}" class="auto-img" alt="圖片"></a>`;
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         return str.replace(urlRegex, (url) => `<a href="${url}" target="_blank" class="auto-link">🔗 開啟連結</a>`);
     }
@@ -721,22 +583,20 @@
         }
     }
 
+    // --- JSON 備份 ---
     function exportJSON() {
         const dataStr = JSON.stringify(appData, null, 2);
         const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        const date = new Date().toISOString().slice(0,10);
-        a.download = `bangkok_backup_${date}.json`;
+        a.download = `bangkok_backup_${new Date().toISOString().slice(0,10)}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
-
-    function triggerImport() { document.getElementById('import-file').click(); }
-
+    
     function handleFileImport(input) {
         const file = input.files[0];
         if (!file) return;
@@ -748,7 +608,7 @@
                     appData = newData;
                     if(!appData.tickets) appData.tickets = [];
                     saveToLocal();
-                    showToast("資料還原成功！頁面重整中...");
+                    showToast("還原成功！重整中...");
                     setTimeout(() => location.reload(), 1500);
                 } else { alert("❌ 格式錯誤"); }
             } catch (error) { alert("❌ 讀取失敗"); }
@@ -757,10 +617,7 @@
         input.value = ''; 
     }
 
-    function renderView(section) { 
-        try { if(renderers[section]) renderers[section](); } 
-        catch(e) { console.error('Render error:', e); }
-    }
+    function renderView(section) { try { if(renderers[section]) renderers[section](); } catch(e) { console.error(e); } }
 
     const renderers = {
         flights: () => {
@@ -771,7 +628,7 @@
                 h += `<div class="info-row"><span class="info-label">旅客/座位</span><span class="info-value">` + (d.passengers || []).map(p => `${p.name} (${p.seat})`).join(', ') + `</span></div>`;
                 return h;
             };
-            document.getElementById('view-flights').innerHTML = genView('✈️ 去程 (Outbound)', appData.flights.outbound) + '<br>' + genView('✈️ 回程 (Inbound)', appData.flights.inbound);
+            document.getElementById('view-flights').innerHTML = genView('✈️ 去程', appData.flights.outbound) + '<br>' + genView('✈️ 回程', appData.flights.inbound);
             const genEdit = (type, data) => {
                 let html = '';
                 for (let k in flightFields) {
@@ -779,9 +636,9 @@
                     if(k==='notes') html += `<textarea onchange="appData.flights.${type}.${k}=this.value">${data[k]||''}</textarea>`;
                     else html += `<input value="${data[k]||''}" onchange="appData.flights.${type}.${k}=this.value">`;
                 }
-                html += `<label>旅客姓名 與 座位號碼 (可新增刪減)</label><div id="passengers-${type}">`;
+                html += `<label>旅客 (可新增)</label><div id="passengers-${type}">`;
                 (data.passengers || []).forEach((p, idx) => {
-                    html += `<div style="display:flex; gap:5px; margin-bottom:5px;"><input placeholder="姓名" value="${p.name}" onchange="appData.flights.${type}.passengers[${idx}].name=this.value"><input placeholder="座位" value="${p.seat}" onchange="appData.flights.${type}.passengers[${idx}].seat=this.value"><button class="danger icon-btn" onclick="removePax('${type}', ${idx})">🗑️</button></div>`;
+                    html += `<div style="display:flex; gap:5px;"><input placeholder="姓名" value="${p.name}" onchange="appData.flights.${type}.passengers[${idx}].name=this.value"><input placeholder="座位" value="${p.seat}" onchange="appData.flights.${type}.passengers[${idx}].seat=this.value"><button class="danger icon-btn" onclick="removePax('${type}', ${idx})">🗑️</button></div>`;
                 });
                 html += `</div><button class="secondary outline full-width" onclick="addPax('${type}')">➕ 新增旅客</button>`;
                 return html;
@@ -792,7 +649,7 @@
         hotel: () => {
             document.getElementById('view-hotel').innerHTML = appData.hotels.map((h, i) => `
                 <div style="border-bottom:3px solid var(--accent-color); padding-bottom:15px; margin-bottom:15px;">
-                    <h3 style="color:var(--primary-color); margin-bottom:5px;">🏨 ${i+1}. ${h.name}</h3>
+                    <h3 style="color:var(--primary-color);">🏨 ${i+1}. ${h.name}</h3>
                     <div class="info-row"><span class="info-label">地址</span><span class="info-value">${h.address}</span></div>
                     <div class="info-row"><span class="info-label">交通</span><span class="info-value">${h.transport}</span></div>
                     <div class="info-row"><span class="info-label">日期</span><span class="info-value">${h.checkin} ~ ${h.checkout}</span></div>
@@ -805,23 +662,20 @@
                 <div class="edit-group"><button class="icon-btn delete-btn-corner danger" onclick="removeHotel(${idx})">🗑️</button><h4 style="margin-top:0;">飯店 ${idx+1}</h4>${Object.entries(fields).map(([k, label]) => `<label>${label}</label>${(k.includes('notes')||k.includes('surr')) ? `<textarea onchange="appData.hotels[${idx}].${k}=this.value">${h[k]}</textarea>` : `<input value="${h[k]}" onchange="appData.hotels[${idx}].${k}=this.value">`}`).join('')}</div>`).join('');
         },
         itinerary: () => {
-            const tabsHtml = appData.itinerary.map((d, i) => 
-                `<div class="date-tab ${i === currentItineraryDayIndex ? 'active' : ''}" onclick="switchItineraryDay(${i})">
-                    <span class="day-label">Day ${i+1}</span>
-                    <span class="day-date">${d.date || '日期未定'}</span>
-                </div>`
+            document.getElementById('itinerary-tabs').innerHTML = appData.itinerary.map((d, i) => 
+                `<div class="date-tab ${i===currentItineraryDayIndex?'active':''}" onclick="switchItineraryDay(${i})">Day ${i+1}<br><span style="font-size:0.7rem">${d.date}</span></div>`
             ).join('');
-            document.getElementById('itinerary-tabs').innerHTML = tabsHtml;
-
-            const currentDay = appData.itinerary[currentItineraryDayIndex];
-            if(currentDay) {
-                const itemsHtml = currentDay.items.map(i => {
-                    const mapLink = i.mapUrl ? `<a href="${i.mapUrl}" target="_blank">📍 點開地圖</a>` : (i.title ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(i.title + ' Bangkok')}" target="_blank">🔍 搜地圖</a>` : '');
-                    return `<div class="timeline-item">
+            const day = appData.itinerary[currentItineraryDayIndex];
+            if(day) {
+                const mapLink = (i) => i.mapUrl ? `<a href="${i.mapUrl}" target="_blank">📍 地圖</a>` : (i.title ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(i.title + ' Bangkok')}" target="_blank">🔍 搜地圖</a>` : '');
+                document.getElementById('view-itinerary').innerHTML = `
+                    <div class="timeline-header-box" style="text-align:center;color:#0277BD;">📅 當日主題：${day.summary || '未設定'}</div>
+                    ${day.items.map(i => `
+                    <div class="timeline-item">
                         <div class="timeline-header-box"><div style="font-weight:bold; color:var(--primary-color); font-size:1.1rem;">${i.time} ${i.title}</div><div style="color:#555; font-size:0.9rem;">${i.desc || ''}</div></div>
                         <div class="detail-card">
                             ${i.transport?`<div class="detail-row"><span class="detail-icon">🚌</span> ${i.transport}</div>`:''}
-                            ${mapLink?`<div class="detail-row"><span class="detail-icon">🗺️</span> ${mapLink}</div>`:''}
+                            ${mapLink(i)?`<div class="detail-row"><span class="detail-icon">🗺️</span> ${mapLink(i)}</div>`:''}
                             ${i.hours?`<div class="detail-row"><span class="detail-icon">🕒</span> ${i.hours}</div>`:''}
                             ${i.mustBuy?`<div class="detail-row"><span class="detail-icon">🛍️</span> 必買: ${i.mustBuy}</div>`:''}
                             ${i.menu?`<div class="detail-row"><span class="detail-icon">🍴</span> 推薦: ${i.menu}</div>`:''}
@@ -829,26 +683,12 @@
                             ${i.photo?`<div class="detail-row"><span class="detail-icon">📷</span> 照片: ${formatContent(i.photo)}</div>`:''}
                             ${i.notes?`<div class="detail-row"><span class="detail-icon">📝</span> 備註: ${formatContent(i.notes)}</div>`:''}
                         </div>
-                    </div>`;
-                }).join('');
-                
-                document.getElementById('view-itinerary').innerHTML = `
-                    <div class="day-summary" style="text-align:center;color:#666;margin-bottom:20px;background:#FFF9C4;display:inline-block;padding:5px 15px;border-radius:15px;width:100%;">${currentDay.summary}</div>
-                    ${itemsHtml}
-                `;
-            }
+                    </div>`).join('')}`;
+            } else { document.getElementById('view-itinerary').innerHTML = '<div style="text-align:center;padding:20px;">尚無行程</div>'; }
 
-            const itemFields = { time:'時間', title:'標題', desc:'簡述', transport:'交通', lat:'緯度 (地圖用)', lng:'經度 (地圖用)', mapUrl:'Google地圖連結', hours:'營業時間', mustBuy:'必買', menu:'推薦菜單', voucher:'憑證', photo:'照片', notes:'備註' };
+            const itemFields = { time:'時間', title:'標題', desc:'簡述', transport:'交通', mapUrl:'Google地圖連結', hours:'營業時間', mustBuy:'必買', menu:'推薦菜單', voucher:'憑證', photo:'照片', notes:'備註' };
             document.getElementById('itinerary-form-container').innerHTML = appData.itinerary.map((d, dIdx) => `
-                <div class="edit-group" style="border:2px solid var(--accent-color);"><button class="icon-btn delete-btn-corner danger" onclick="removeDay(${dIdx})">🗑️</button>
-                <label>Day ${dIdx+1} 日期</label><input type="date" value="${d.date}" onchange="appData.itinerary[${dIdx}].date=this.value">
-                <label>當日主題</label><input value="${d.summary}" onchange="appData.itinerary[${dIdx}].summary=this.value">
-                <hr style="margin:10px 0;"><label>行程項目 (點擊展開)</label>
-                <div id="day-${dIdx}-items">${d.items.map((item, iIdx) => `<details><summary>${item.time || '時間'} - ${item.title || '項目'} <span onclick="removeItm(${dIdx}, ${iIdx})" style="float:right; color:red;">🗑️</span></summary><div class="details-content">${Object.entries(itemFields).map(([k, label]) => {
-                    if(k==='photo'){return `<label>${label}</label><input placeholder="貼上網址" value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[${iIdx}].${k}=this.value" id="it-img-${dIdx}-${iIdx}"><label class="file-upload-btn">📁 上傳圖片<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.itinerary[${dIdx}].items[${iIdx}].photo = base64; document.getElementById('it-img-${dIdx}-${iIdx}').value = '已載入圖片'; saveImage('itinerary'); })"></label>`;}
-                    return `<label>${label}</label><input value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[${iIdx}].${k}=this.value">`;
-                }).join('')}</div></details>`).join('')}</div>
-                <button class="outline full-width" onclick="addItm(${dIdx})">➕ 新增項目</button></div>`).join('');
+                <div class="edit-group" style="border:2px solid var(--accent-color);"><button class="icon-btn delete-btn-corner danger" onclick="removeDay(${dIdx})">🗑️</button><label>Day ${dIdx+1} 日期</label><input type="date" value="${d.date}" onchange="appData.itinerary[${dIdx}].date=this.value"><label>當日主題</label><input value="${d.summary}" onchange="appData.itinerary[${dIdx}].summary=this.value"><hr style="margin:10px 0;"><label>行程項目</label><div id="day-${dIdx}-items">${d.items.map((item, iIdx) => `<details><summary>${item.time || '時間'} - ${item.title || '項目'} <span onclick="removeItm(${dIdx}, ${iIdx})" style="float:right; color:red;">🗑️</span></summary><div class="details-content">${Object.entries(itemFields).map(([k, label]) => {if(k==='photo'){return `<label>${label}</label><input placeholder="貼上網址" value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[${iIdx}].${k}=this.value" id="it-img-${dIdx}-${iIdx}"><label class="file-upload-btn">📁 上傳圖片 (自動壓縮)<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.itinerary[${dIdx}].items[${iIdx}].photo = base64; document.getElementById('it-img-${dIdx}-${iIdx}').value = '已載入圖片'; saveImage('itinerary'); })"></label>`;} return `<label>${label}</label><input value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[iIdx].${k}=this.value">`;}).join('')}</div></details>`).join('')}</div><button class="outline full-width" onclick="addItm(${dIdx})">➕ 新增項目</button></div>`).join('');
         },
         tickets: () => {
             const ticketFields = { name:'票券名稱', date:'日期', time:'時間', priceAdult:'成人價格', priceChild:'兒童價格', location:'地點', image:'憑證圖片', notes:'備註' };
@@ -856,17 +696,17 @@
             document.getElementById('view-tickets').innerHTML = list.length ? list.map(t => `
                 <div class="ticket-card"><div class="ticket-header"><div class="ticket-title">${t.name || '未命名'}</div><div style="font-size:0.9rem; color:#666;">${t.date || ''} ${t.time || ''}</div></div><div class="ticket-info-row"><span class="ticket-info-label">價格:</span><div class="ticket-info-value"><span class="ticket-price-tag">成人: ${t.priceAdult}</span> <span class="ticket-price-tag" style="background:#E0F2F1; color:#00695C;">兒童: ${t.priceChild}</span></div></div><div class="ticket-info-row"><span class="ticket-info-label">地點:</span><div class="ticket-info-value">${t.location || '-'}</div></div><div class="ticket-info-row"><span class="ticket-info-label">備註:</span><div class="ticket-info-value">${t.notes || '-'}</div></div>${t.image ? `<div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px;"><b>憑證:</b><br>${formatContent(t.image)}</div>` : ''}</div>`).join('') : '<div style="text-align:center; padding:20px;">尚無票券資料</div>';
             document.getElementById('tickets-form').innerHTML = list.map((t, i) => `
-                <div class="edit-group"><button class="icon-btn delete-btn-corner danger" onclick="removeArr('tickets', ${i})">🗑️</button>${Object.entries(ticketFields).map(([k, label]) => {if(k==='image'){return `<label>${label}</label><input placeholder="貼上網址" value="${t[k]||''}" onchange="appData.tickets[${i}].${k}=this.value" id="ticket-img-${i}"><label class="file-upload-btn">📁 上傳圖片<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.tickets[${i}].image = base64; document.getElementById('ticket-img-${i}').value = '已載入圖片'; saveImage('tickets'); })"></label>`;} return `<label>${label}</label><input value="${t[k]||''}" onchange="appData.tickets[${i}].${k}=this.value">`;}).join('')}</div>`).join('');
+                <div class="edit-group"><button class="icon-btn delete-btn-corner danger" onclick="removeArr('tickets', ${i})">🗑️</button>${Object.entries(ticketFields).map(([k, label]) => {if(k==='image'){return `<label>${label}</label><input placeholder="貼上網址" value="${t[k]||''}" onchange="appData.tickets[${i}].${k}=this.value" id="ticket-img-${i}"><label class="file-upload-btn">📁 上傳圖片 (自動壓縮)<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.tickets[${i}].image = base64; document.getElementById('ticket-img-${i}').value = '已載入圖片'; saveImage('tickets'); })"></label>`;} return `<label>${label}</label><input value="${t[k]||''}" onchange="appData.tickets[${i}].${k}=this.value">`;}).join('')}</div>`).join('');
         },
         phrases: () => {
-            document.getElementById('view-phrases').innerHTML = appData.phrases.map(p => `<div class="card" style="padding:10px; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-weight:bold;">${p.zh}</div><div style="color:var(--primary-color)">${p.th}</div></div><button class="icon-btn" onclick="speak('th-TH', null, '${p.th}')">🔊</button></div>`).join('');
+            document.getElementById('view-phrases').innerHTML = appData.phrases.map(p => `<div class="card" style="padding:10px; display:flex; justify-content:space-between; align-items:center;"><div><div style="font-weight:bold;">${p.zh}</div><div style="color:var(--primary-color)">${p.th}</div></div><button class="icon-btn outline" onclick="speak('th-TH', null, '${p.th}')">🔊</button></div>`).join('');
             document.getElementById('phrases-form').innerHTML = appData.phrases.map((p, i) => `<div class="edit-group"><button class="icon-btn delete-btn-corner danger" onclick="removeArr('phrases', ${i})">🗑️</button><input placeholder="中文" value="${p.zh}" onchange="appData.phrases[${i}].zh=this.value"><input placeholder="泰文" value="${p.th}" onchange="appData.phrases[${i}].th=this.value"></div>`).join('');
         },
         shopping: () => {
             document.getElementById('view-shopping').innerHTML = appData.shopping.map((s, i) => `
                 <div class="shopping-item ${s.done ? 'checked' : ''}"><div class="check-circle" onclick="toggleShopCheck(${i})">${s.done ? '✔' : ''}</div><div style="flex-grow:1;">${s.category?`<div class="shopping-cat">${s.category}</div>`:''}<b>${s.item}</b> <span style="font-size:0.8rem; background:#eee;">${s.location}</span>${s.image?`<div style="margin-top:5px;">${formatContent(s.image)}</div>`:''}${s.notes?`<div style="font-size:0.85rem; color:#666; margin-top:2px;">備註: ${s.notes}</div>`:''}</div><div style="font-weight:bold; color:var(--primary-color);">฿${s.price}</div></div>`).join('');
             document.getElementById('shopping-form').innerHTML = appData.shopping.map((s, i) => `
-                <div class="edit-group"><button class="icon-btn delete-btn-corner danger" onclick="removeArr('shopping', ${i})">🗑️</button><input placeholder="分類" value="${s.category||''}" onchange="appData.shopping[${i}].category=this.value"><input placeholder="品項" value="${s.item}" onchange="appData.shopping[${i}].item=this.value"><input placeholder="價格" value="${s.price}" onchange="appData.shopping[${i}].price=this.value"><input placeholder="地點" value="${s.location}" onchange="appData.shopping[${i}].location=this.value"><input placeholder="備註" value="${s.notes||''}" onchange="appData.shopping[${i}].notes=this.value"><input placeholder="圖片網址" value="${s.image||''}" onchange="appData.shopping[${i}].image=this.value" id="shop-img-${i}"><label class="file-upload-btn">📁 上傳圖片<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.shopping[${i}].image = base64; document.getElementById('shop-img-${i}').value = '已載入圖片'; saveImage('shopping'); })"></label></div>`).join('');
+                <div class="edit-group"><button class="icon-btn delete-btn-corner danger" onclick="removeArr('shopping', ${i})">🗑️</button><input placeholder="分類" value="${s.category||''}" onchange="appData.shopping[${i}].category=this.value"><input placeholder="品項" value="${s.item}" onchange="appData.shopping[${i}].item=this.value"><input placeholder="價格" value="${s.price}" onchange="appData.shopping[${i}].price=this.value"><input placeholder="地點" value="${s.location}" onchange="appData.shopping[${i}].location=this.value"><input placeholder="備註" value="${s.notes||''}" onchange="appData.shopping[${i}].notes=this.value"><input placeholder="圖片網址" value="${s.image||''}" onchange="appData.shopping[${i}].image=this.value" id="shop-img-${i}"><label class="file-upload-btn">📁 上傳圖片 (自動壓縮)<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.shopping[${i}].image = base64; document.getElementById('shop-img-${i}').value = '已載入圖片'; saveImage('shopping'); })"></label></div>`).join('');
         },
         notes: () => {
             document.getElementById('view-notes').innerHTML = appData.notes.map(n => `<div class="card" style="background:#FFF9C4; white-space:pre-wrap;"><b>${n.date}</b>\n${n.content}</div>`).join('');
@@ -917,7 +757,10 @@
         document.getElementById('mrt-img').style.width = mapScale + '%';
     }
 
-    document.addEventListener('DOMContentLoaded', () => { renderView('flights'); });
+    document.addEventListener('DOMContentLoaded', () => { 
+        initAudio(); 
+        renderView('itinerary'); 
+    });
 </script>
 
 </body>
