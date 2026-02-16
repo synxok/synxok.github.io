@@ -245,7 +245,7 @@
 <div id="toast-container"></div>
 
 <header>
-    <h1><span>🐘</span> 2026 宸宸星星曼谷大冒險 <img src="TH flag.png" class="header-icon" alt="Thai Flag"></h1>
+    <h1><span><img src="elephant.png" class="header-icon" alt="Elephant"></span> 2026 宸宸星星曼谷大冒險 <img src="TH flag.png" class="header-icon" alt="Thai Flag"></h1>
 </header>
 
 <div class="container">
@@ -669,7 +669,7 @@
             if(day) {
                 const mapLink = (i) => i.mapUrl ? `<a href="${i.mapUrl}" target="_blank">📍 地圖</a>` : (i.title ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(i.title + ' Bangkok')}" target="_blank">🔍 搜地圖</a>` : '');
                 document.getElementById('view-itinerary').innerHTML = `
-                    <div class="timeline-header-box" style="text-align:center;color:#0277BD;">📅 當日主題：${day.summary || '未設定'}</div>
+                    <div class="timeline-header-box" style="text-align:center;color:#0277BD;">📅${day.summary || '未設定'}</div>
                     ${day.items.map(i => `
                     <div class="timeline-item">
                         <div class="timeline-header-box"><div style="font-weight:bold; color:var(--primary-color); font-size:1.1rem;">${i.time} ${i.title}</div><div style="color:#555; font-size:0.9rem;">${i.desc || ''}</div></div>
