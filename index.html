@@ -16,7 +16,6 @@
         /* --- 1. 基礎 CSS --- */
         :root {
             --primary-color: #4AA3DF;
-            --primary-dark: #3588c0;
             --accent-color: #FFD700;
             --bg-color: #E0F7FA;
             --text-color: #444;
@@ -85,7 +84,7 @@
             box-shadow: 0 4px 15px rgba(74, 163, 223, 0.15); 
             position: sticky; top: 0; z-index: 100;
             padding-top: env(safe-area-inset-top); 
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         h1 { 
             margin: 0; font-size: 1.2rem; color: var(--primary-color); 
@@ -237,9 +236,8 @@
 <!-- 音效元件 -->
 <audio id="audio-opening"></audio>
 <audio id="audio-bgm" loop></audio>
-<!-- 點擊音效 -->
+<!-- 點擊與頁面音效 (共用) -->
 <audio id="audio-click"></audio>
-<!-- 頁面切換音效 -->
 <audio id="audio-page-effect"></audio>
 
 <div id="toast-container"></div>
@@ -359,33 +357,40 @@
     
     <div id="page-emergency" class="page">
         <div class="card emergency-section" style="border-left: 5px solid #FF7043;">
-            <h3 style="color:#D84315; text-align:center;">🆘 急難救助</h3>
-            <h4>《台灣外交部》</h4><p>急難救助專線（海外直撥）：<a href="tel:080008509">0800-085-09</a></p>
+            <h3 style="color:#D84315;">🆘 急難救助</h3>
+            
+            <h4>《台灣外交部》</h4>
+            <p>急難救助專線（海外直撥）：<a href="tel:080008509">0800-085-09</a></p>
+
             <h4>《駐泰國台北經濟文化辦事處》</h4>
             <p>緊急電話（非上班時間）：<a href="tel:+66816664006" style="color:red; font-weight:bold;">+66-81-6664006</a></p>
             <p>辦公室電話（上班時間）：<a href="tel:+6621193555">+66-2-119-3555</a></p>
             <p>電子郵件：<a href="mailto:tha@mofa.gov.tw">tha@mofa.gov.tw</a></p>
+
             <h4>《泰國當地緊急電話》</h4>
-            <p><strong>觀光警察：1155</strong> (中文服務)</p><p>醫療急救中心：1669 或 1554</p><p>消費者保護辦公室：1166</p>
-            <p style="background:#FFF3E0; padding:10px; font-size:0.85rem; border-radius:10px; margin-top:10px;">急難救助專線僅限緊急情況（車禍、搶劫、生命安危）。<br>一般問題請於上班時間聯繫辦事處。</p>
-            <h4>《LINE帳號》</h4><p>保平安服務專線 LINE ID: <strong>@Taiwan119</strong></p>
+            <p>觀光警察：1155 (中文服務)</p>
+            <p>醫療急救中心：1669 或 1554</p>
+            <p>消費者保護辦公室：1166</p>
+            <p style="background:#FFF3E0; padding:10px; font-size:0.85rem; border-radius:10px; margin-top:10px;">
+                急難救助專線僅限緊急情況（車禍、搶劫、生命安危）。<br>
+                一般問題請於上班時間聯繫辦事處。
+            </p>
+
+            <h4>《LINE帳號》</h4>
+            <p>保平安服務專線 LINE ID: <strong>@Taiwan119</strong></p>
         </div>
 
-        <!-- 🔄 資料轉移區塊 -->
+        <!-- 檔案備份 -->
         <div class="card transfer-box">
-            <h3 style="color:#fff;">🔄 備份與同步 (給家人)</h3>
-            <div style="font-size:0.9rem; color:#ddd; margin-bottom:10px; line-height:1.6;">
-                <b>操作方式：</b><br>
-                1. 點擊 <span style="color:#FFD700;">📤 複製代碼</span> (匯出資料)<br>
-                2. 傳給手機 / 家人<br>
-                3. 在另一台裝置貼上代碼<br>
-                4. 點擊 <span style="color:#4CAF50;">📥 貼上讀取</span> (覆蓋資料)
+            <h3 style="color:#fff;">🔄 JSON 備份與還原</h3>
+            <div style="font-size:0.9rem; color:#ddd; margin-bottom:10px;">
+                將資料存成檔案，或從檔案還原資料。
             </div>
-            <textarea id="transfer-area" placeholder="代碼顯示區..." onclick="this.select()"></textarea>
-            <div style="display:flex; gap:10px; margin-top:10px;">
-                <button class="secondary" onclick="exportData()" style="flex:1;">📤 複製代碼</button>
-                <button class="success" onclick="importData()" style="flex:1;">📥 貼上讀取</button>
+            <div style="display:flex; gap:10px;">
+                <button class="secondary" onclick="exportJSON()" style="flex:1;">📤 匯出備份檔</button>
+                <button class="success" onclick="document.getElementById('import-file').click()" style="flex:1;">📥 匯入備份檔</button>
             </div>
+            <input type="file" id="import-file" style="display: none;" accept=".json" onchange="handleFileImport(this)">
         </div>
 
         <div style="text-align:center; margin-top:20px;"><button onclick="resetApp()" class="danger" style="opacity:0.6;">⚠️ 重置所有資料</button></div>
@@ -393,11 +398,11 @@
 </div>
 
 <nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchPage('flights', this)" data-page="flights"><img src="airplane.png" class="nav-icon-img"><span>航班</span></div>
+    <div class="nav-item" onclick="switchPage('flights', this)" data-page="flights"><img src="airplane.png" class="nav-icon-img"><span>航班</span></div>
     <div class="nav-item" onclick="switchPage('hotel', this)" data-page="hotel"><img src="hotel.png" class="nav-icon-img"><span>飯店</span></div>
     <div class="nav-item active" onclick="switchPage('itinerary', this)" data-page="itinerary"><img src="liti.png" class="nav-icon-img"><span>行程</span></div>
     <div class="nav-item" onclick="switchPage('mrt', this)" data-page="mrt"><img src="train.png" class="nav-icon-img"><span>捷運</span></div>
-    <!-- 票券按鈕 -->
+    <!-- 票券按鈕 (預設Base64圖示防止破圖) -->
     <div class="nav-item" onclick="switchPage('tickets', this)" data-page="tickets"><img src="ticket.png" class="nav-icon-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjODg4IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIgOWE1IDUgMCAwIDAgMTAgMHY2YTUgNSAwIDAgMCAxMCAwdi02YTUgNSAwIDAgMC0xMCAwVjJINnY3eiIvPjwvc3ZnPg=='"><span>票券</span></div>
     <div class="nav-item" onclick="switchPage('translate', this)" data-page="translate"><img src="man.png" class="nav-icon-img"><span>翻譯</span></div>
     <div class="nav-item" onclick="switchPage('phrases', this)" data-page="phrases"><img src="TH flag.png" class="nav-icon-img"><span>泰文</span></div>
@@ -407,13 +412,14 @@
 </nav>
 
 <script>
-    const STORAGE_KEY = 'TravelApp_2026_V19_Final'; 
+    const STORAGE_KEY = 'TravelApp_2026_V20_Fixed'; 
     
-    // --- 音效檔案設定 ---
+    // --- 音效檔案設定 (請確認檔案已放入資料夾) ---
     const AUDIO_FILES = {
-        opening: 'opening.mp3', 
-        bgm: 'bgm.mp3',         
-        click: 'click.mp3',     
+        opening: 'opening.mp3', // 開場音效
+        bgm: 'bgm.mp3',         // 背景音樂
+        click: 'click.mp3',     // 預設點擊音效
+        // 各頁面專屬切換音效
         pages: {
             'flights': 'flights.mp3',
             'hotel': 'hotel.mp3',
@@ -483,7 +489,7 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
     let currentItineraryDayIndex = 0;
 
-    function saveToLocal() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); } catch(e) { showToast('⚠️ 儲存失敗！'); } }
+    function saveToLocal() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); } catch(e) { showToast('⚠️ 儲存失敗！檔案可能過大。'); } }
     function saveData(section) { saveToLocal(); showToast('✨ 儲存成功！'); toggleEdit(section); if(section==='itinerary') renderView('itinerary');}
     function saveImage(section) { saveToLocal(); showToast('圖片上傳成功！'); }
     function showToast(msg) {
@@ -530,8 +536,10 @@
         const screen = document.getElementById('splash-screen');
         screen.style.opacity = '0';
         setTimeout(() => screen.style.display = 'none', 800);
+        
         const openAudio = document.getElementById('audio-opening');
         if(openAudio.src && openAudio.paused) openAudio.play().catch(e=>{});
+
         const bgm = document.getElementById('audio-bgm');
         if(bgm.src) bgm.play().catch(e=>{});
     }
@@ -606,6 +614,7 @@
                 const newData = JSON.parse(e.target.result);
                 if (newData.flights) {
                     appData = newData;
+                    // 資料修補
                     if(!appData.tickets) appData.tickets = [];
                     saveToLocal();
                     showToast("還原成功！重整中...");
@@ -688,7 +697,7 @@
 
             const itemFields = { time:'時間', title:'標題', desc:'簡述', transport:'交通', mapUrl:'Google地圖連結', hours:'營業時間', mustBuy:'必買', menu:'推薦菜單', voucher:'憑證', photo:'照片', notes:'備註' };
             document.getElementById('itinerary-form-container').innerHTML = appData.itinerary.map((d, dIdx) => `
-                <div class="edit-group" style="border:2px solid var(--accent-color);"><button class="icon-btn delete-btn-corner danger" onclick="removeDay(${dIdx})">🗑️</button><label>Day ${dIdx+1} 日期</label><input type="date" value="${d.date}" onchange="appData.itinerary[${dIdx}].date=this.value"><label>當日主題</label><input value="${d.summary}" onchange="appData.itinerary[${dIdx}].summary=this.value"><hr style="margin:10px 0;"><label>行程項目</label><div id="day-${dIdx}-items">${d.items.map((item, iIdx) => `<details><summary>${item.time || '時間'} - ${item.title || '項目'} <span onclick="removeItm(${dIdx}, ${iIdx})" style="float:right; color:red;">🗑️</span></summary><div class="details-content">${Object.entries(itemFields).map(([k, label]) => {if(k==='photo'){return `<label>${label}</label><input placeholder="貼上網址" value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[${iIdx}].${k}=this.value" id="it-img-${dIdx}-${iIdx}"><label class="file-upload-btn">📁 上傳圖片 (自動壓縮)<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.itinerary[${dIdx}].items[${iIdx}].photo = base64; document.getElementById('it-img-${dIdx}-${iIdx}').value = '已載入圖片'; saveImage('itinerary'); })"></label>`;} return `<label>${label}</label><input value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[iIdx].${k}=this.value">`;}).join('')}</div></details>`).join('')}</div><button class="outline full-width" onclick="addItm(${dIdx})">➕ 新增項目</button></div>`).join('');
+                <div class="edit-group" style="border:2px solid var(--accent-color);"><button class="icon-btn delete-btn-corner danger" onclick="removeDay(${dIdx})">🗑️</button><label>Day ${dIdx+1} 日期</label><input type="date" value="${d.date}" onchange="appData.itinerary[${dIdx}].date=this.value"><label>當日主題</label><input value="${d.summary}" onchange="appData.itinerary[${dIdx}].summary=this.value"><hr style="margin:10px 0;"><label>行程項目 (點擊展開)</label><div id="day-${dIdx}-items">${d.items.map((item, iIdx) => `<details><summary>${item.time || '時間'} - ${item.title || '項目'} <span onclick="removeItm(${dIdx}, ${iIdx})" style="float:right; color:red;">🗑️</span></summary><div class="details-content">${Object.entries(itemFields).map(([k, label]) => {if(k==='photo'){return `<label>${label}</label><input placeholder="貼上網址" value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[${iIdx}].${k}=this.value" id="it-img-${dIdx}-${iIdx}"><label class="file-upload-btn">📁 上傳圖片 (自動壓縮)<input type="file" style="display:none;" accept="image/*" onchange="compressImage(this.files[0], (base64) => { appData.itinerary[${dIdx}].items[${iIdx}].photo = base64; document.getElementById('it-img-${dIdx}-${iIdx}').value = '已載入圖片'; saveImage('itinerary'); })"></label>`;} return `<label>${label}</label><input value="${item[k]||''}" onchange="appData.itinerary[${dIdx}].items[${iIdx}].${k}=this.value">`;}).join('')}</div></details>`).join('')}</div><button class="outline full-width" onclick="addItm(${dIdx})">➕ 新增項目</button></div>`).join('');
         },
         tickets: () => {
             const ticketFields = { name:'票券名稱', date:'日期', time:'時間', priceAdult:'成人價格', priceChild:'兒童價格', location:'地點', image:'憑證圖片', notes:'備註' };
